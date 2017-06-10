@@ -12,6 +12,7 @@
         <spring.springframework.version>4.1.7.RELEASE</spring.springframework.version>
         <lombok.version>1.16.10</lombok.version>
         <curator.version>3.2.0</curator.version>
+        <guava.version>21.0</guava.version>
     </properties>
 
     <dependencies>
@@ -25,11 +26,19 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>${lombok.version}</version>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.apache.curator</groupId>
             <artifactId>curator-recipes</artifactId>
             <version>${curator.version}</version>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${guava.version}</version>
+            <optional>true</optional>
         </dependency>
     </dependencies>
 
