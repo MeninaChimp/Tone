@@ -25,18 +25,18 @@ public class ListenerAsyncProcessExecutor {
             new ThreadPoolExecutor.AbortPolicy()
             );
 
-    public static void commit(final Listener listener, final Entry<String, String> data){
+    public static void commit(final ListenerChain chain, final Entry<String, String> data){
         try {
             executor.execute(new Runnable() {
                 @Override
                 public void run() {
-                    listener.propertyChange(data);
+                    chain.invoke(data);
                 }
             });
         }catch (RejectedExecutionException e){
-            log.error(String.format("Tone Listener process executor has exhausted, %s"), e.getMessage(), e);
+            log.error(String.format("listener process executor has exhausted, %s"), e.getMessage(), e);
         }catch (Throwable t){
-            log.error(String.format("Commit Tone Listener process task failed, %s"), t.getMessage(), t);
+            log.error(String.format("Commit listener to process failed, %s"), t.getMessage(), t);
         }
 
         return;

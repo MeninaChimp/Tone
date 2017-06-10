@@ -7,5 +7,5 @@ import java.util.Map.Entry;
  */
 public interface Listener {
 
-    void propertyChange(Entry<String, String> data);
+    void propertyChange(ListenerChain chain, Entry<String, String> data);
 }
