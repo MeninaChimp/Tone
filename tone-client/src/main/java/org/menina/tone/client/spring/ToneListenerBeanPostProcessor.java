@@ -1,7 +1,7 @@
 package org.menina.tone.client.spring;
 
 import org.menina.tone.client.listener.Listener;
-import org.menina.tone.client.listener.ToneListenerHolder;
+import org.menina.tone.client.listener.ListenerHolder;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.stereotype.Component;
@@ -14,7 +14,7 @@ public class ToneListenerBeanPostProcessor implements BeanPostProcessor{
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
         if(bean instanceof Listener){
-            ToneListenerHolder.register((Listener) bean);
+            ListenerHolder.register((Listener) bean);
         }
 
         return bean;

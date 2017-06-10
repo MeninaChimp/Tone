@@ -1,6 +1,6 @@
 package org.menina.tone.client.spring;
 
-import org.menina.tone.client.listener.DefaultPropertyChangeListener;
+import org.menina.tone.client.listener.ToneListener;
 import org.menina.tone.client.listener.Listener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,6 +13,6 @@ public class ToneAutoConfiguration {
 
     @Bean
     public Listener defaultListener(){
-        return new DefaultPropertyChangeListener();
+        return new ToneListener();
     }
 }

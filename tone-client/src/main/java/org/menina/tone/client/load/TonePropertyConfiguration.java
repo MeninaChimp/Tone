@@ -1,5 +1,6 @@
 package org.menina.tone.client.load;
 
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
@@ -7,6 +8,7 @@ import org.springframework.context.annotation.PropertySource;
 /**
  * Created by Menina on 2017/6/10.
  */
+@Getter
 @Configuration
 @PropertySource(value = "classpath:tone.properties", ignoreResourceNotFound = true)
 public class TonePropertyConfiguration {
@@ -22,20 +24,4 @@ public class TonePropertyConfiguration {
 
     @Value("${node}")
     private String node;
-
-    public String getZookeeper() {
-        return zookeeper;
-    }
-
-    public String getRoot() {
-        return root;
-    }
-
-    public Float getVersion() {
-        return version;
-    }
-
-    public String getNode() {
-        return node;
-    }
 }
