@@ -6,9 +6,9 @@ import java.util.Map.Entry;
 /**
  * Created by Menina on 2017/6/10.
  */
-public interface ResouceLoader<K, V> {
+public interface ResourceLoader {
 
-    Map<String, String> load();
+    Map<String, String> loads(String path);
 
-    Entry<String, String> loadKey(String key);
+    Entry<String, String> loadProperty(String nodePath);
 }
