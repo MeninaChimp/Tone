@@ -8,7 +8,10 @@ import java.util.Map.Entry;
  */
 public interface ResourceLoader {
 
+    void setUrl(String url);
+
     Map<String, String> loads(String path);
 
     Entry<String, String> loadProperty(String nodePath);
+
 }

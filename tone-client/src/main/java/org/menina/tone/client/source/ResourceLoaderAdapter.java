@@ -14,8 +14,4 @@ public abstract class ResourceLoaderAdapter implements ResourceLoader{
 
     private String url;
 
-    private String version;
-
-    private String path;
-
 }
