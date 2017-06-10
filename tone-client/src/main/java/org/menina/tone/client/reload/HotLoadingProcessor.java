@@ -32,8 +32,8 @@ public class HotLoadingProcessor implements HotLoading, ApplicationContextAware{
                     oldValue = beanWrapper.getPropertyValue(propertyName).toString();
                     beanWrapper.setPropertyValue(propertyName, newValue);
                     log.info(String.format("update property: %s success, oldValue: %s, new Value: %s"), propertyName, oldValue, newValue);
-                }catch (Exception e){
-                    log.error(String.format("Failed to hot-reload property: %s value to newValue: %s, %s", propertyName, newValue, e.getMessage()), e);
+                }catch (Throwable t){
+                    log.error(String.format("Failed to hot-reload property: %s value to newValue: %s, %s", propertyName, newValue, t.getMessage()), t);
                 }
             }
         }
