@@ -1,8 +1,8 @@
 package org.menina.tone.client.source.zookeeper;
 
 import com.google.common.base.Charsets;
-import com.google.common.base.Throwables;
 import com.google.common.collect.Maps;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.apache.curator.framework.api.GetChildrenBuilder;
@@ -13,10 +13,12 @@ import org.menina.tone.client.source.ResourceLoaderAdapter;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by Menina on 2017/6/10.
  */
+@Slf4j
 public class ZookeeperResourceLoader extends ResourceLoaderAdapter {
 
     private volatile static CuratorFramework client;
@@ -39,6 +41,7 @@ public class ZookeeperResourceLoader extends ResourceLoaderAdapter {
             throw new RuntimeException(String.format("Failed to load properties by given path, %s", t.getMessage()), t);
         }
 
+        this.logProperties(propertiesMap);
         return propertiesMap;
     }
 
@@ -58,17 +61,26 @@ public class ZookeeperResourceLoader extends ResourceLoaderAdapter {
     private CuratorFramework instance() {
         if (null == client) {
             synchronized (ZookeeperResourceLoader.class) {
-                CuratorFramework client = CuratorFrameworkFactory.newClient(
-                        this.getUrl(),
-                        2000,
-                        2000,
-                        new ExponentialBackoffRetry(1000, 3));
+                if(null == client){
+                    client = CuratorFrameworkFactory.newClient(
+                            this.getUrl(),
+                            2000,
+                            2000,
+                            new ExponentialBackoffRetry(1000, 3));
 
-                client.start();
+                    client.start();
+                    client.getCuratorListenable().addListener(new ZookeeperListener());
+                }
             }
         }
 
-        client.getCuratorListenable().addListener(new ZookeeperListener());
         return client;
+    }
+
+    private void logProperties(Map<String, String> propertiesMap){
+        Set<String> keys = propertiesMap.keySet();
+        for (String key : keys){
+            log.info(String.format("Tone Properties{ %s --> %s }", key, propertiesMap.get(key)));
+        }
     }
 }
