@@ -1,6 +1,7 @@
 package org.menina.tone.client.reload;
 
 import org.springframework.beans.BeansException;
+import org.springframework.beans.PropertyValue;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
@@ -24,10 +25,10 @@ public class RecordConfiguredBeansPostProcessor implements BeanFactoryPostProces
         for(String name : names){
             BeanDefinition beanDefinition = beanFactory.getBeanDefinition(name);
             if(beanDefinition.getPropertyValues().size() != 0){
-                for(Object value : beanDefinition.getPropertyValues().getPropertyValueList()){
-                    String propertyValue = value.toString().trim();
-                    if(pattern.matcher(propertyValue).find()){
-                        ConfiguredBeansHolder.recordConfiguredBean(propertyValue.substring(2, propertyValue.length() - 1), name);
+                for(PropertyValue propertyValue : beanDefinition.getPropertyValues().getPropertyValueList()){
+                    String value = propertyValue.getValue().toString().trim();
+                    if(pattern.matcher(value).find()){
+                        ConfiguredBeansHolder.recordConfiguredBean(value.substring(2, value.length() - 1), name);
                     }
                 }
             }
