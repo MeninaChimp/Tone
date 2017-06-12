@@ -5,5 +5,5 @@ package org.menina.tone.client.reload;
  */
 public interface HotLoading {
 
-    void reload(String propertyName, String newValue);
+    void reload(String node, String newValue);
 }

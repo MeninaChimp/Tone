@@ -17,7 +17,7 @@ import java.util.regex.Pattern;
 @Component
 public class RecordConfiguredBeansPostProcessor implements BeanFactoryPostProcessor, PriorityOrdered {
 
-    private Pattern pattern = Pattern.compile("^\\$\\{\\w*\\}$");
+    private Pattern pattern = Pattern.compile("^\\$\\{.*\\}$");
 
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
@@ -28,7 +28,7 @@ public class RecordConfiguredBeansPostProcessor implements BeanFactoryPostProces
                 for(PropertyValue propertyValue : beanDefinition.getPropertyValues().getPropertyValueList()){
                     String value = propertyValue.getValue().toString().trim();
                     if(pattern.matcher(value).find()){
-                        ConfiguredBeansHolder.recordConfiguredBean(value.substring(2, value.length() - 1), name);
+                        ConfiguredBeansHolder.recordConfiguredBean(value.substring(2, value.length() - 1), propertyValue.getName(), name);
                     }
                 }
             }
