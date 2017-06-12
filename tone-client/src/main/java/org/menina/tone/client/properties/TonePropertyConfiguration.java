@@ -1,38 +1,69 @@
 package org.menina.tone.client.properties;
 
 import com.google.common.collect.Lists;
-import lombok.Getter;
 import org.apache.curator.utils.ZKPaths;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 
 import java.util.List;
 
 /**
  * Created by Menina on 2017/6/10.
  */
-@Getter
-@Configuration
-@PropertySource(value = "classpath:tone.properties", ignoreResourceNotFound = true)
 public class TonePropertyConfiguration {
 
-    @Value("${address}")
-    private String address;
+    private static String address;
 
-    @Value("${root}")
-    private String root;
+    private static String root;
 
-    @Value("${version}")
-    private String version;
+    private static String version;
 
-    @Value("${nodes}")
-    private String nodes;
+    private static String nodes;
 
-    public List<String> makePaths(){
+    private static String resourceLoader;
+
+    public static String getAddress() {
+        return address;
+    }
+
+    public static void setAddress(String address) {
+        TonePropertyConfiguration.address = address;
+    }
+
+    public static String getRoot() {
+        return root;
+    }
+
+    public static void setRoot(String root) {
+        TonePropertyConfiguration.root = root;
+    }
+
+    public static String getVersion() {
+        return version;
+    }
+
+    public static void setVersion(String version) {
+        TonePropertyConfiguration.version = version;
+    }
+
+    public static String getNodes() {
+        return nodes;
+    }
+
+    public static void setNodes(String nodes) {
+        TonePropertyConfiguration.nodes = nodes;
+    }
+
+    public static String getResourceLoader() {
+        return resourceLoader;
+    }
+
+    public static void setResourceLoader(String resourceLoader) {
+        TonePropertyConfiguration.resourceLoader = resourceLoader;
+    }
+
+    public List<String> makePaths() {
         String[] nodesArr = nodes.trim().split(",");
         List<String> paths = Lists.newArrayList();
-        for(String node : nodesArr){
+        for (String node : nodesArr) {
             paths.add(ZKPaths.makePath(ZKPaths.makePath(root, version), node));
         }
 
