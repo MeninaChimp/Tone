@@ -6,4 +6,7 @@ package org.menina.tone.client.source;
 public interface PropertyChangeListener
 {
     void reloadProperty(String nodePath);
+
+    void setResourceLoader(ResourceLoader resourceLoader);
+
 }
