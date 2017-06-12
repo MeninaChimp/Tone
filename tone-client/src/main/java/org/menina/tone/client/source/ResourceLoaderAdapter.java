@@ -1,6 +1,5 @@
 package org.menina.tone.client.source;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -9,9 +8,10 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
-public abstract class ResourceLoaderAdapter implements ResourceLoader{
+public abstract class ResourceLoaderAdapter<T> implements ResourceLoader<T>{
 
     private String url;
+
+    private T resourceContainerListener;
 
 }

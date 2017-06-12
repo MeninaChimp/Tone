@@ -1,5 +1,7 @@
 package org.menina.tone.client.source.zookeeper;
 
+import lombok.NoArgsConstructor;
+import org.apache.curator.framework.api.CuratorListener;
 import org.menina.tone.client.listener.ListenerAsyncProcessExecutor;
 import org.menina.tone.client.listener.ListenerChainFactory;
 import org.menina.tone.client.source.PropertyChangeListenerAdapter;
@@ -9,6 +11,7 @@ import java.util.Map;
 /**
  * Created by Menina on 2017/6/10.
  */
+@NoArgsConstructor
 public class ZookeeperPropertyChangeListener extends PropertyChangeListenerAdapter {
 
     @Override

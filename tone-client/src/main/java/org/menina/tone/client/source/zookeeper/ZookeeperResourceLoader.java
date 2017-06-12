@@ -5,10 +5,12 @@ import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
+import org.apache.curator.framework.api.CuratorListener;
 import org.apache.curator.framework.api.GetChildrenBuilder;
 import org.apache.curator.framework.api.GetDataBuilder;
 import org.apache.curator.retry.ExponentialBackoffRetry;
 import org.apache.curator.utils.ZKPaths;
+import org.menina.tone.client.source.PropertyChangeListener;
 import org.menina.tone.client.source.ResourceLoaderAdapter;
 
 import java.util.List;
@@ -19,9 +21,30 @@ import java.util.Set;
  * Created by Menina on 2017/6/10.
  */
 @Slf4j
-public class ZookeeperResourceLoader extends ResourceLoaderAdapter {
+public class ZookeeperResourceLoader extends ResourceLoaderAdapter<CuratorListener> {
 
     private volatile static CuratorFramework client;
+
+    private CuratorFramework instance() {
+        if (null == client) {
+            synchronized (ZookeeperResourceLoader.class) {
+                if(null == client){
+                    client = CuratorFrameworkFactory.newClient(this.getUrl(), new ExponentialBackoffRetry(1000, 3));
+                    client.start();
+                    client.getCuratorListenable().addListener(super.getResourceContainerListener());
+                }
+            }
+        }
+
+        return client;
+    }
+
+    private void logProperties(Map<String, String> propertiesMap){
+        Set<String> keys = propertiesMap.keySet();
+        for (String key : keys){
+            log.info(String.format("Tone Properties{ %s --> %s }", key, propertiesMap.get(key)));
+        }
+    }
 
     @Override
     public Map<String, String> loads(String path) {
@@ -54,33 +77,6 @@ public class ZookeeperResourceLoader extends ResourceLoaderAdapter {
             return Maps.immutableEntry(propertyName, propertyValue);
         }catch (Throwable t) {
             throw new RuntimeException(String.format("Failed to load property by given nodePath, %s", t.getMessage()), t);
-        }
-    }
-
-
-    private CuratorFramework instance() {
-        if (null == client) {
-            synchronized (ZookeeperResourceLoader.class) {
-                if(null == client){
-                    client = CuratorFrameworkFactory.newClient(
-                            this.getUrl(),
-                            2000,
-                            2000,
-                            new ExponentialBackoffRetry(1000, 3));
-
-                    client.start();
-                    client.getCuratorListenable().addListener(new ZookeeperListener());
-                }
-            }
-        }
-
-        return client;
-    }
-
-    private void logProperties(Map<String, String> propertiesMap){
-        Set<String> keys = propertiesMap.keySet();
-        for (String key : keys){
-            log.info(String.format("Tone Properties{ %s --> %s }", key, propertiesMap.get(key)));
         }
     }
 }
