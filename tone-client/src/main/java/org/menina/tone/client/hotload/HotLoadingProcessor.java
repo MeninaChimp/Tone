@@ -18,6 +18,11 @@ public class HotLoadingProcessor implements HotLoading{
     @Override
     public void reload(String key, String value) {
         Map<String, Set<String>> propertyAndBeanNameMap = RefreshBeanHolder.get(key);
+        if(propertyAndBeanNameMap == null){
+            log.info(String.format("No bean listening the change of config key \'%s\', need @Refresh(%s) above the field and bean should inject into Spring", key, key));
+            return;
+        }
+
         for(String propertyName : propertyAndBeanNameMap.keySet()){
             for(String beanName : propertyAndBeanNameMap.get(propertyName)){
                 Object bean = ToneSpringBeanUtils.getBean(beanName);
