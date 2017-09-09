@@ -15,7 +15,7 @@ public class SpringPropertySourceLoader implements PropertySourceLoader{
     public Map<String, String> loadResource(String... paths){
         Map<String, String> propertySource = Maps.newHashMap();
         for(String path : paths){
-            propertySource.putAll(this.resourceLoader.loads(path));
+            propertySource.putAll(this.resourceLoader.load(path));
         }
 
         return propertySource;

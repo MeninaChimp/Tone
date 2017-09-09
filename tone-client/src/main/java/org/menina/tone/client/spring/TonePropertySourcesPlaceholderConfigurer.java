@@ -1,6 +1,7 @@
 package org.menina.tone.client.spring;
 
 import org.menina.tone.client.properties.TonePropertyConfiguration;
+import org.menina.tone.client.support.Constant;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
@@ -33,7 +34,13 @@ public class TonePropertySourcesPlaceholderConfigurer extends PropertySourcesPla
         }
 
         Map<String, String> propertySource = this.propertySourceLoader.loadResource(this.tonePropertyConfiguration.makePaths().toArray(new String[]{}));
-        this.propertySources.addFirst(new TonePropertySource(TonePropertySource.name, propertySource));
+        this.propertySources.addFirst(new PropertySource<Map<String, String>>(Constant.TONE_PROPERTY_SOURCE, propertySource){
+            @Override
+            public Object getProperty(String name) {
+                return this.getSource().get(name);
+            }
+        });
+
         processProperties(beanFactory, new PropertySourcesPropertyResolver(this.propertySources));
         this.appliedPropertySources = this.propertySources;
     }

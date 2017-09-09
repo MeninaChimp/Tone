@@ -1,63 +1,72 @@
 package org.menina.tone.client.properties;
 
 import com.google.common.collect.Lists;
+import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.curator.utils.ZKPaths;
+import org.menina.tone.client.source.ConfigRepositoryChangeListener;
+import org.menina.tone.client.source.ResourceLoader;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.Enumeration;
 import java.util.List;
+import java.util.Properties;
 
 /**
  * Created by Menina on 2017/6/10.
  */
+@Slf4j
+@Data
 public class TonePropertyConfiguration {
 
-    private static String address;
+    private static final String CONFIG_FILE = "tone.properties";
+    private static final String CONNECT_STR = "tone.connectAddress";
+    private static final String ROOT_NODE = "tone.rootNode";
+    private static final String VERSION = "tone.version";
+    private static final String NODES = "tone.nodes";
 
-    private static String root;
+    private String address;
 
-    private static String version;
+    private String root;
 
-    private static String nodes;
+    private String version;
 
-    private static String resourceLoader;
+    private String nodes;
 
-    public static String getAddress() {
-        return address;
+    private String resourceLoader;
+
+    private String configRepositoryChangeListener;
+
+    public TonePropertyConfiguration(){
+        super();
+        Properties props = new Properties();
+        try {
+            Enumeration<URL> registerFiles = TonePropertyConfiguration.class.getClassLoader().getResources(
+                    CONFIG_FILE);
+
+            URL registerFile = null;
+            while (registerFiles.hasMoreElements()) {
+                registerFile = registerFiles.nextElement();
+                try (InputStream in = registerFile.openStream()) {
+                    props.load(in);
+                }
+            }
+        } catch (IOException e) {
+            log.error(e.getMessage(), e);
+        }
+
+        this.address = props.getProperty(CONNECT_STR);
+        this.root = props.getProperty(ROOT_NODE);
+        this.version = props.getProperty(VERSION);
+        this.nodes = props.getProperty(NODES, "");
     }
 
-    public static void setAddress(String address) {
-        TonePropertyConfiguration.address = address;
-    }
+    public static TonePropertyConfiguration instance = new TonePropertyConfiguration();
 
-    public static String getRoot() {
-        return root;
-    }
-
-    public static void setRoot(String root) {
-        TonePropertyConfiguration.root = root;
-    }
-
-    public static String getVersion() {
-        return version;
-    }
-
-    public static void setVersion(String version) {
-        TonePropertyConfiguration.version = version;
-    }
-
-    public static String getNodes() {
-        return nodes;
-    }
-
-    public static void setNodes(String nodes) {
-        TonePropertyConfiguration.nodes = nodes;
-    }
-
-    public static String getResourceLoader() {
-        return resourceLoader;
-    }
-
-    public static void setResourceLoader(String resourceLoader) {
-        TonePropertyConfiguration.resourceLoader = resourceLoader;
+    public static TonePropertyConfiguration getInstance(){
+        return instance;
     }
 
     public List<String> makePaths() {

@@ -8,10 +8,7 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @NoArgsConstructor
-public abstract class ResourceLoaderAdapter<T> implements ResourceLoader<T>{
+public abstract class ResourceLoaderAdapter implements ResourceLoader{
 
-    private String url;
-
-    private T resourceContainerListener;
 
 }

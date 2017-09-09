@@ -8,7 +8,7 @@ import java.util.Map;
 public class InitializedListenerChain implements ListenerChain{
 
     @Override
-    public void invoke(Map.Entry<String, String> data) {
+    public void invoke(Map<String, String> data) {
         return;
     }
 }

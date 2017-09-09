@@ -5,13 +5,16 @@ import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
+import org.apache.curator.framework.api.CuratorEvent;
 import org.apache.curator.framework.api.CuratorListener;
 import org.apache.curator.framework.api.GetChildrenBuilder;
 import org.apache.curator.framework.api.GetDataBuilder;
 import org.apache.curator.retry.ExponentialBackoffRetry;
 import org.apache.curator.utils.ZKPaths;
-import org.menina.tone.client.source.PropertyChangeListener;
-import org.menina.tone.client.source.ResourceLoaderAdapter;
+import org.apache.zookeeper.WatchedEvent;
+import org.apache.zookeeper.Watcher;
+import org.menina.tone.client.source.PropertyChangeProcessor;
+import org.menina.tone.client.source.ResourceLoader;
 
 import java.util.List;
 import java.util.Map;
@@ -21,62 +24,71 @@ import java.util.Set;
  * Created by Menina on 2017/6/10.
  */
 @Slf4j
-public class ZookeeperResourceLoader extends ResourceLoaderAdapter<CuratorListener> {
+public class ZookeeperResourceLoader implements ResourceLoader, CuratorListener {
 
-    private volatile static CuratorFramework client;
+    private CuratorFramework client;
 
-    private CuratorFramework instance() {
-        if (null == client) {
-            synchronized (ZookeeperResourceLoader.class) {
-                if(null == client){
-                    client = CuratorFrameworkFactory.newClient(this.getUrl(), new ExponentialBackoffRetry(1000, 3));
-                    client.start();
-                    client.getCuratorListenable().addListener(super.getResourceContainerListener());
-                }
-            }
-        }
+    private PropertyChangeProcessor propertyChangeProcessor;
 
-        return client;
-    }
-
-    private void logProperties(Map<String, String> propertiesMap){
-        Set<String> keys = propertiesMap.keySet();
-        for (String key : keys){
-            log.info(String.format("Tone Properties{ %s --> %s }", key, propertiesMap.get(key)));
-        }
+    public ZookeeperResourceLoader(String zookeeperAdddress){
+        this.client = CuratorFrameworkFactory.newClient(zookeeperAdddress, new ExponentialBackoffRetry(1000, 3));
+        this.client.start();
+        this.client.getCuratorListenable().addListener(this);
+        ZookeeperPropertyChangeProcessor zookeeperPropertyChangeProcessor = new ZookeeperPropertyChangeProcessor();
+        zookeeperPropertyChangeProcessor.setResourceLoader(this);
+        this.propertyChangeProcessor = zookeeperPropertyChangeProcessor;
     }
 
     @Override
-    public Map<String, String> loads(String path) {
-        GetChildrenBuilder childrenBuilder = this.instance().getChildren();
+    public Map<String, String> load(String path) {
+        GetChildrenBuilder childrenBuilder = this.client.getChildren();
         Map<String, String> propertiesMap = Maps.newHashMap();
         try {
             List<String> nodes = childrenBuilder.forPath(path);
-            if (nodes != null) {
+            if (nodes != null && nodes.size() != 0) {
                 for (String node : nodes) {
                     Map.Entry<String, String> data = this.loadProperty(ZKPaths.makePath(path, node));
-                    if (data != null) {
-                        propertiesMap.put(data.getKey(), data.getValue());
-                    }
+                    propertiesMap.put(data.getKey(), data.getValue());
                 }
+            } else {
+                Map.Entry<String, String> data = this.loadProperty(path);
+                propertiesMap.put(data.getKey(), data.getValue());
             }
         } catch (Throwable t) {
             throw new RuntimeException(String.format("Failed to load properties by given path, %s", t.getMessage()), t);
         }
 
-        this.logProperties(propertiesMap);
+        this.log(propertiesMap);
         return propertiesMap;
     }
 
-    @Override
-    public Map.Entry<String, String> loadProperty(String nodePath) {
+    private Map.Entry<String, String> loadProperty(String nodePath) throws Exception {
         String propertyName = ZKPaths.getNodeFromPath(nodePath);
-        GetDataBuilder data = this.instance().getData();
-        try {
-            String propertyValue = new String(data.watched().forPath(nodePath), Charsets.UTF_8);
-            return Maps.immutableEntry(propertyName, propertyValue);
-        }catch (Throwable t) {
-            throw new RuntimeException(String.format("Failed to load property by given nodePath, %s", t.getMessage()), t);
+        GetDataBuilder data = this.client.getData();
+        String propertyValue = new String(data.watched().forPath(nodePath), Charsets.UTF_8);
+        return Maps.immutableEntry(propertyName, propertyValue);
+    }
+
+    private void log(Map<String, String> propertiesMap) {
+        Set<String> keys = propertiesMap.keySet();
+        for (String key : keys) {
+            log.info(String.format("Tone Properties{ %s --> %s }", key, propertiesMap.get(key)));
+        }
+    }
+
+    @Override
+    public void eventReceived(CuratorFramework client, CuratorEvent event) throws Exception {
+        final WatchedEvent watchedEvent = event.getWatchedEvent();
+        if (watchedEvent != null) {
+            if (watchedEvent.getState() == Watcher.Event.KeeperState.SyncConnected) {
+                switch (watchedEvent.getType()) {
+                    case NodeDataChanged:
+                        this.propertyChangeProcessor.notifier(this.propertyChangeProcessor.reloadProperty(watchedEvent.getPath()));
+                        break;
+                    default:
+                        break;
+                }
+            }
         }
     }
 }

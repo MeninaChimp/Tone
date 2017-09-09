@@ -1,6 +1,5 @@
 package org.menina.tone.client.spring;
 
-import org.menina.tone.client.source.ResourceLoader;
 
 import java.util.Map;
 
@@ -11,5 +10,4 @@ public interface PropertySourceLoader {
 
     Map<String, String> loadResource(String... paths);
 
-    void setResourceLoader(ResourceLoader resourceLoader);
 }

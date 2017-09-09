@@ -1,4 +1,4 @@
-package org.menina.tone.client.reload;
+package org.menina.tone.client.hotload;
 
 
 import java.util.HashMap;
@@ -9,15 +9,15 @@ import java.util.Set;
 /**
  * Created by Menina on 2017/6/10.
  */
-public class ConfiguredBeansHolder {
+public class RefreshBeanHolder {
 
     private static Map<String, Map<String, Set<String>>> placeholderBeanNamesMap = new HashMap<>();
 
-    public static Map<String, Set<String>> getConfiguredBeans(String placeholder){
+    public static Map<String, Set<String>> get(String placeholder){
         return placeholderBeanNamesMap.get(placeholder);
     }
 
-    public static void recordConfiguredBean(String placeholder, String propertyName, String beanName){
+    public static void register(String placeholder, String propertyName, String beanName){
         if(!placeholderBeanNamesMap.containsKey(placeholder)){
             placeholderBeanNamesMap.put(placeholder, new HashMap<String, Set<String>>());
         }

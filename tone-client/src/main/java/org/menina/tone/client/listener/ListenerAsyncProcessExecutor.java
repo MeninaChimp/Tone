@@ -2,6 +2,7 @@ package org.menina.tone.client.listener;
 
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.*;
 
@@ -13,9 +14,9 @@ public class ListenerAsyncProcessExecutor {
 
     private static int maxTaskNum = 20;
 
-    private static int corePoolSize = 5;
+    private static int corePoolSize = 1;
 
-    private static int maxPoolSize = 10;
+    private static int maxPoolSize = 5;
 
     private static ExecutorService executor = new ThreadPoolExecutor(corePoolSize,
             maxPoolSize,
@@ -25,7 +26,7 @@ public class ListenerAsyncProcessExecutor {
             new ThreadPoolExecutor.AbortPolicy()
             );
 
-    public static void commit(final ListenerChain chain, final Entry<String, String> data){
+    public static void commit(final ListenerChain chain, final Map<String, String> data){
         try {
             executor.execute(new Runnable() {
                 @Override
