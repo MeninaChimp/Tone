@@ -34,7 +34,7 @@ public class ListenerAsyncProcessExecutor {
                     try {
                         chain.invoke(data);
                     }catch (Throwable t){
-                        /// 防御性容错
+                        ///  防御性容错
                         log.error(t.getMessage(), t);
                     }
                 }

@@ -36,7 +36,7 @@ public class ZookeeperPropertyChangeProcessor implements PropertyChangeProcessor
                     try{
                         hotLoading.reload(entry.getKey(), entry.getValue());
                     }catch (Throwable t){
-                        /// 防御性容错
+                        ///  防御性容错
                         log.error(t.getMessage(), t);
                     }
                 }
