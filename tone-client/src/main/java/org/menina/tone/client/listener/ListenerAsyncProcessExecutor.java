@@ -31,7 +31,12 @@ public class ListenerAsyncProcessExecutor {
             executor.execute(new Runnable() {
                 @Override
                 public void run() {
-                    chain.invoke(data);
+                    try {
+                        chain.invoke(data);
+                    }catch (Throwable t){
+                        /// 防御性容错
+                        log.error(t.getMessage(), t);
+                    }
                 }
             });
         }catch (RejectedExecutionException e){

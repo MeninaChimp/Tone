@@ -1,6 +1,7 @@
 package org.menina.tone.client.source.zookeeper;
 
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.menina.tone.client.hotload.HotLoading;
 import org.menina.tone.client.hotload.HotLoadingProcessor;
 import org.menina.tone.client.listener.ListenerAsyncProcessExecutor;
@@ -15,6 +16,7 @@ import java.util.concurrent.Executors;
 /**
  * Created by Menina on 2017/6/10.
  */
+@Slf4j
 @NoArgsConstructor
 public class ZookeeperPropertyChangeProcessor implements PropertyChangeProcessor {
 
@@ -31,7 +33,12 @@ public class ZookeeperPropertyChangeProcessor implements PropertyChangeProcessor
             @Override
             public void run() {
                 for (Map.Entry<String, String> entry : data.entrySet()) {
-                    hotLoading.reload(entry.getKey(), entry.getValue());
+                    try{
+                        hotLoading.reload(entry.getKey(), entry.getValue());
+                    }catch (Throwable t){
+                        /// 防御性容错
+                        log.error(t.getMessage(), t);
+                    }
                 }
             }
         });
