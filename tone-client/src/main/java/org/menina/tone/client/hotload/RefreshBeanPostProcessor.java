@@ -6,18 +6,12 @@ import org.menina.tone.client.listener.ListenerChainFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
-import org.springframework.stereotype.Component;
 
-import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-
-import static org.springframework.beans.BeanUtils.findPropertyForMethod;
 
 /**
  * Created by Menina on 2017/9/8.
  */
-@Component
 public class RefreshBeanPostProcessor implements BeanPostProcessor {
 
     @Override

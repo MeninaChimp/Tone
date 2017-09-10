@@ -11,7 +11,6 @@ import javax.annotation.PostConstruct;
 /**
  * Created by Menina on 2017/9/9.
  */
-@Component
 public class ToneSpringBeanUtils implements ApplicationContextAware {
 	private static ToneSpringBeanUtils toneSpringBeanUtils;
 	private ApplicationContext act;
