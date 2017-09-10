@@ -36,8 +36,29 @@
     }
 ```
  
-  如果你需要暂时关闭Tone，移除掉@EnableToneConfig即可。
+  需要热加载的属性，打上@Refresh注解，注解的值是你需要监听的配置key：
+
+```
+    @Refresh("redis.port")
+    private Integer needHotLoad;
+```
+    打上@Refresh注解的属性需要提供Set方法。
+    属性所在的类的实例需要注入到Spring。
     
+   需要监听变更，实现Listener接口，并注入到Spring。
+   
+```
+    @Slf4j
+    @Component
+    public class ChangeListener implements Listener{
+        @Override
+        public void propertyChange(ListenerChain listenerChain, Map<String, String> map) {
+            log.info("ChangeListener:" + map.toString());
+            listenerChain.invoke(map);
+        }
+    }
+```
+  
 扩展
 ------
 
