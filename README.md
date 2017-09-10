@@ -27,7 +27,7 @@
 使用
 ------
 
-  开启Tone的配置管理的功能    
+ - 开启Tone的配置管理的功能.  
 
 ```
     @Configuration
@@ -36,16 +36,15 @@
     }
 ```
  
-  需要热加载的属性，打上@Refresh注解，注解的值是你需要监听的配置key：
+ - 需要热加载的属性，打上@Refresh注解，注解的值是你需要监听的配置key:
 
 ```
     @Refresh("redis.port")
     private Integer needHotLoad;
 ```
-    打上@Refresh注解的属性需要提供Set方法。
-    属性所在的类的实例需要注入到Spring。
-    
-   需要监听变更，实现Listener接口，并注入到Spring。
+    打上@Refresh注解的属性需要提供Set方法,属性所在的类的实例需要注入到Spring.
+   
+ - 需要监听变更，实现Listener接口，并注入到Spring。
    
 ```
     @Slf4j
@@ -62,4 +61,4 @@
 扩展
 ------
 
-  待整理
+  
