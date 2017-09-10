@@ -35,13 +35,11 @@
             <groupId>org.apache.curator</groupId>
             <artifactId>curator-recipes</artifactId>
             <version>${curator.version}</version>
-            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>${guava.version}</version>
-            <optional>true</optional>
         </dependency>
     </dependencies>
 </project>
