@@ -17,7 +17,7 @@ import org.springframework.core.type.AnnotationMetadata;
 public class ToneConfigRegistrar implements ImportBeanDefinitionRegistrar {
 
     protected static final String DEFAULT_LISTENER = "defaultListener";
-    protected static final String REFRESH_BEAN_PPSTPROCESSOR = "RefreshBeanPostProcessor";
+    protected static final String REFRESH_BEAN_POST_PROCESSOR = "RefreshBeanPostProcessor";
     protected static final String TONE_PROPERTY_SOURCES_PLACEHOLDER_CONFIGURER = "tonePropertySourcesPlaceholderConfigurer";
     protected static final String TONE_SPRING_BEAN_UTILS = "toneSpringBeanUtils";
 
@@ -25,7 +25,7 @@ public class ToneConfigRegistrar implements ImportBeanDefinitionRegistrar {
     public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry) {
         BeanRegistrationUtil.registerBeanDefinitionIfNotExists(registry, DEFAULT_LISTENER, ToneListener.class);
         BeanRegistrationUtil.registerBeanDefinitionIfNotExists(registry, TONE_PROPERTY_SOURCES_PLACEHOLDER_CONFIGURER, TonePropertySourcesPlaceholderConfigurer.class);
-        BeanRegistrationUtil.registerBeanDefinitionIfNotExists(registry, REFRESH_BEAN_PPSTPROCESSOR, RefreshBeanPostProcessor.class);
+        BeanRegistrationUtil.registerBeanDefinitionIfNotExists(registry, REFRESH_BEAN_POST_PROCESSOR, RefreshBeanPostProcessor.class);
         BeanRegistrationUtil.registerBeanDefinitionIfNotExists(registry, TONE_SPRING_BEAN_UTILS, ToneSpringBeanUtils.class);
     }
 }
