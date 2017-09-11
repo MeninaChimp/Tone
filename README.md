@@ -39,27 +39,8 @@
  - 需要热加载的属性，打上@Refresh注解，注解的值是你需要监听的配置key:
 
 ```
-@Component("needRefresh")
-public class NeedRefresh {
-
-    @Refresh("guard.private.config.kafka.bootstrap.servers")
-    private String servers;
-
-    @Refresh("guard.private.config.kafka.partitions")
-    private Integer partitions;
-
-    public void setServers(String servers) {
-        this.servers = servers;
-    }
-
-    public void setPartitions(Integer partitions) {
-        this.partitions = partitions;
-    }
-    
-    public .....
-    
-    }
-
+    @Refresh("redis.port")
+    private Integer needHotLoad;
 ```
     打上@Refresh注解的属性需要提供Set方法,属性所在的类的实例需要注入到Spring.
    
