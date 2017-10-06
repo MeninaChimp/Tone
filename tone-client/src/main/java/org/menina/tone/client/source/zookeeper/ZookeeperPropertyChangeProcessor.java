@@ -22,13 +22,17 @@ public class ZookeeperPropertyChangeProcessor implements PropertyChangeProcessor
 
     private HotLoading hotLoading = new HotLoadingProcessor();
 
-    private ResourceLoader resourceLoader;
+    private ZookeeperResourceLoader resourceLoader;
 
     private static ExecutorService executor = Executors.newFixedThreadPool(5);
 
+    public ZookeeperPropertyChangeProcessor(ZookeeperResourceLoader zookeeperResourceLoader){
+        this.resourceLoader = zookeeperResourceLoader;
+    }
+
     @Override
     public Map<String, String> reloadProperty(String nodePath) {
-        final Map<String, String> data = resourceLoader.load(nodePath);
+        final Map<String, String> data = resourceLoader.loadProperty(nodePath);
         executor.execute(new Runnable() {
             @Override
             public void run() {
@@ -49,9 +53,5 @@ public class ZookeeperPropertyChangeProcessor implements PropertyChangeProcessor
     @Override
     public void notifier(Map<String, String> data) {
         ListenerAsyncProcessExecutor.commit(new ListenerChainFactory().getListenerChain(), data);
-    }
-
-    public void setResourceLoader(ResourceLoader resourceLoader) {
-        this.resourceLoader = resourceLoader;
     }
 }
