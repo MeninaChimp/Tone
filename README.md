@@ -6,7 +6,9 @@
 - 无侵入
 - 热加载
 - 变更监听
-- 灰度发布（待实现）
+- 灰度发布
+- 网络闪断恢复监听
+- 权限管理（待实现）
 
 配置
 ------
@@ -18,16 +20,32 @@
 ``` properties
     
     tone.connectAddress: 127.0.0.1:2181
-    tone.rootNode=/tone/org/menina/serviceA
-    tone.version=1.0.1
-    tone.nodes=comm.redis.1
+    tone.apps: sso,redis-A,mongodb-A
 
 ```
 
 使用
 ------
 
- - 开启Tone的配置管理的功能.  
+控制台：
+---
+
+
+客户端：
+---
+
+ - 引入依赖：
+ 
+ ```
+    <dependency>
+        <groupId>org.menina</groupId>
+        <artifactId>tone-client</artifactId>
+        <version>{lastest.version}</version>
+    </dependency>
+```
+  
+
+ - 开启Tone的配置管理的功能. 
 
 ```
     @Configuration
