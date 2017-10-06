@@ -1,0 +1,22 @@
+<!-- header -->
+<div data-ng-include=" 'tpl/blocks/header.html' " class="app-header navbar">
+</div>
+<!-- / header -->
+
+<!-- menu -->
+<div data-ng-include=" 'tpl/blocks/aside.html' " class="app-aside hidden-xs">
+</div>
+
+<!-- content -->
+<div class="app-content">
+    <toaster-container
+            toaster-options="{'position-class': 'toast-top-right', 'close-button':true, 'progress-bar':true}"></toaster-container>
+
+    <div class="app-content-body fade-in-up" ui-view></div>
+</div>
+<!-- /content -->
+
+<!-- content -->
+<div data-ng-include="'tpl/blocks/footer.html'" class="app-footer wrapper b-t bg-light">
+</div>
+<!-- /content -->

@@ -1,0 +1,40 @@
+<!doctype html>
+<html ng-app="app">
+<head>
+    <meta charset="utf-8">
+    <title>Tone</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/app.css">
+    <link rel="stylesheet" href="css/animate.css">
+    <link rel="stylesheet" href="css/font.css">
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/simple-line-icons.css">
+    <link rel="stylesheet" href="vendor/modules/angularjs-toaster/toaster.css">
+    <link rel="stylesheet" href="vendor/angular/angular-xeditable-0.8.0/xeditable.css">
+</head>
+<body>
+<div class="app">
+    <div ui-view=""></div>
+</div>
+<script src="vendor/angular/angular.js"></script>
+<script src="vendor/angular/angular-animate/angular-animate.js"></script>
+<script src="vendor/angular/angular-ui-router/angular-ui-router.js"></script>
+<script src="js/app.js"></script>
+<script src="js/config.lazyload.js"></script>
+<script src="js/main.js"></script>
+<!-- app模块的使用要在app.js的声明之后，否则找不到app模块-->
+<script src="js/config.router.js"></script>
+
+<!-- 业务controller一样需要引入才能被容器加载，或者使用uiLoad做懒加载，为此你需要在路由根页面（index.html）引入ui.load.js，同样的，自定义路由注入到了app模块，所以ui.load需要注入到app模块-->
+<script src="js/controller/configManagerCtrl.js"></script>
+<script src="vendor/modules/ui-load.js"></script>
+<script src="vendor/angular/oclazyload/ocLazyLoad.js"></script>
+
+<!--  懒加载ui-load必须配置ui-jq，否则不生效-->
+<script src="vendor/modules/ui-jq.js"></script>
+<script src="vendor/modules/angularjs-toaster/toaster.js"></script>
+<script src="vendor/modules/textAngular/textAngular-sanitize.min.js"></script></body>
+<script src="vendor/modules/angular-ui-bootstrap/ui-bootstrap-tpls-0.13.3.min.js"></script>
+<script src="vendor/angular/angular-xeditable-0.8.0/xeditable.js"></script>
+</html>

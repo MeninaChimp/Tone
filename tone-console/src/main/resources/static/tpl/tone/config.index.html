@@ -1,0 +1,123 @@
+<div class="wrapper" ng-controller="ConfigManagerCtrl">
+    <div class="bg-light lter b-b wrapper-xl-x">
+        <form class="form-group" name="queryConfigForm">
+            <div class="col-md-6">
+                <div class="col-md-1 wrapper-xs">
+                    <label class="control-label font-bold">APP:</label>
+                </div>
+                <div class="col-md-4">
+                    <ui-select ng-model="$parent.appName" theme="bootstrap" required="required">
+                        <ui-select-match placeholder="支持模糊搜索">{{$select.selected}}
+                        </ui-select-match>
+                        <ui-select-choices
+                                repeat="app in apps | filter: $select.search | limitTo : 10">
+                            <div ng-bind-html="app | highlight: $select.search"></div>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+                <!--<div class="col-md-1">-->
+                <!--<button type="button" class="btn btn-default" ng-click="initConfigs()"-->
+                <!--ng-disabled="queryConfigForm.$invalid">查询-->
+                <!--</button>-->
+                <!--</div>-->
+            </div>
+            <div class="col-md-6 col-md-push-3" ng-show="appInfoShow">
+                <label class="control-label col-md-12" style="font-size: 2px;">所属部门: {{appInfo.department}}</label>
+                <label class="control-label col-md-12" style="font-size: 2px;">应用负责人: {{appInfo.owner}}</label>
+                <label class="control-label col-md-12" style="font-size: 2px;">联系人邮箱: {{appInfo.email}}</label>
+            </div>
+        </form>
+    </div>
+
+    <div class="panel panel-default m-t-lg" ng-show="configShow">
+        <div class="panel-heading">
+            <button type="button" class="btn btn-success btn-xs" ng-click="show_config_create(appName)"
+                    ng-disabled="queryConfigForm.$invalid">创建配置
+            </button>
+            <button type="button" class="btn btn-xs" ng-class="!grayReleaseStatus ? 'btn-success' : 'btn-warning'" ng-click="gray_release_switch()"
+                    ng-disabled="queryConfigForm.$invalid">
+                <div ng-show="!grayReleaseStatus">灰度发布</div>
+                <div ng-show="grayReleaseStatus">切回全局发布</div>
+            </button>
+        </div>
+        <div class="panel-body">
+            <div class="table-responsive">
+                <table class="table table-striped m-b-none">
+                    <thead>
+                    <tr>
+                        <th style="width:20%">Key</th>
+                        <th style="width:20%">Value</th>
+                        <th style="width:20%">IP</th>
+                        <th style="width:20%">修改人</th>
+                        <th style="width:20%">修改时间</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="config in configs track by $index">
+                        <td>{{config.key}}</td>
+                        <td ng-show="!grayReleaseStatus" style="text-decoration:none" editable-text="config.value"
+                            onaftersave="config_update(config)">{{config.value}}
+                        </td>
+                        <td ng-show="grayReleaseStatus" style="text-decoration:none" editable-text="config.value">{{config.value}}
+                        </td>
+                        <td ng-show="!grayReleaseStatus">
+                            <div style="width: 100%;" ng-repeat="ip in config.ips track by $index">{{ip}}</div>
+                        </td>
+                        <td ng-show="grayReleaseStatus">
+                            <select class="form-control" ng-model="grayRelease[config.key]"
+                                    ng-options="ip for ip in config.ips">
+                                <option value="">选择目标IP</option>
+                            </select>
+                        </td>
+                        <td>{{config.updater}}</td>
+                        <td>{{config.updateTime | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+                        <td>
+                            <button ng-show="!grayReleaseStatus" class="btn btn-xs btn-default" ng-click="config_remove(config)"><i class="fa fa-edit"></i>&nbsp;删除
+                            </button>
+                            <button ng-show="grayReleaseStatus" class="btn btn-xs btn-primary" ng-click="gray_release(config, grayRelease[config.key])" ng-disabled="grayRelease[config.key] == undefined"><i class="fa fa-edit"></i>&nbsp;发布
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/ng-template" id="config_create.html">
+    <div class="modal-header">
+        <h3 class="modal-title">创建配置({{config.app}})</h3>
+    </div>
+    <div class="modal-body">
+        <div class="panel-body" style="max-height: 400px; overflow: auto;">
+            <form class="form-horizontal" role="form" name="configCreateForm">
+                <div class="row" style="margin-top: 20px;">
+                    <div class="col-md-6 col-md-pull-1">
+                        <div class="form-group">
+                            <label class="col-md-6 control-label"><b class="text-danger">*</b>Key</label>
+                            <div class="col-md-6">
+                                <input ng-model="config.key" type="text" class="form-control" required="required">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-md-pull-2">
+                        <div class="form-group">
+                            <label class="col-md-6 control-label"><b class="text-danger">*</b>Value</label>
+                            <div class="col-md-6">
+                                <input ng-model="config.value" type="text" class="form-control" required="required">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-success" type="button" ng-click="config_create()"
+                ng-disabled="configCreateForm.$invalid">创建
+        </button>
+        <button class="btn btn-warning" type="button" ng-click="close_modal()">取消</button>
+    </div>
+</script>
