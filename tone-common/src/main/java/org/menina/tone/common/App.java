@@ -1,4 +1,4 @@
-package org.menina;
+package org.menina.tone.common;
 
 /**
  * Hello world!
