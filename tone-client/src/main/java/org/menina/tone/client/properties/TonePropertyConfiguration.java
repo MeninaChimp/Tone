@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.curator.utils.ZKPaths;
 import org.menina.tone.client.source.ConfigRepositoryChangeListener;
 import org.menina.tone.client.source.ResourceLoader;
+import org.menina.tone.common.utils.Constant;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,15 +24,11 @@ public class TonePropertyConfiguration {
 
     private static final String CONFIG_FILE = "tone.properties";
     private static final String CONNECT_STR = "tone.connectAddress";
-    private static final String ROOT_NODE = "tone.rootNode";
-    private static final String VERSION = "tone.version";
-    private static final String NODES = "tone.nodes";
+    private static final String APPS = "tone.apps";
 
     private String address;
 
-    private String root;
-
-    private String version;
+    private String root = Constant.APP_PATH;
 
     private String nodes;
 
@@ -58,9 +55,7 @@ public class TonePropertyConfiguration {
         }
 
         this.address = props.getProperty(CONNECT_STR);
-        this.root = props.getProperty(ROOT_NODE);
-        this.version = props.getProperty(VERSION);
-        this.nodes = props.getProperty(NODES, "");
+        this.nodes = props.getProperty(APPS);
     }
 
     public static TonePropertyConfiguration instance = new TonePropertyConfiguration();
@@ -73,7 +68,7 @@ public class TonePropertyConfiguration {
         String[] nodesArr = nodes.trim().split(",");
         List<String> paths = Lists.newArrayList();
         for (String node : nodesArr) {
-            paths.add(ZKPaths.makePath(ZKPaths.makePath(root, version), node));
+            paths.add(ZKPaths.makePath(root, node));
         }
 
         return paths;
