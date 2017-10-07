@@ -30,6 +30,21 @@
 控制台：
 ---
 
+- 添加应用，配置应用信息。
+
+![alt text](https://github.com/MeninaChimp/Tone/blob/master/doc/img/%E5%BA%94%E7%94%A8%E7%AE%A1%E7%90%86.png)
+
+- 创建配置。
+
+![alt text](https://github.com/MeninaChimp/Tone/blob/master/doc/img/%E5%88%9B%E5%BB%BA%E9%85%8D%E7%BD%AE.png)
+
+- 全局发布。
+
+![alt text](https://github.com/MeninaChimp/Tone/blob/master/doc/img/%E5%85%A8%E5%B1%80%E5%8F%91%E5%B8%83.png)
+
+- 灰度发布。
+
+![alt text](https://github.com/MeninaChimp/Tone/blob/master/doc/img/%E7%81%B0%E5%BA%A6%E5%8F%91%E5%B8%83.png)
 
 客户端：
 ---
@@ -75,8 +90,13 @@
         }
     }
 ```
-  
-扩展
+  
+实例
 ------
+
+- 灰度发布实例
+
+![alt text](https://github.com/MeninaChimp/Tone/blob/master/doc/img/%E7%83%AD%E5%8A%A0%E8%BD%BD%E5%8F%91%E5%B8%83%E5%AE%9E%E4%BE%8B.png)
+
 
   
