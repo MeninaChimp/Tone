@@ -39,9 +39,11 @@
 ![alt text](https://github.com/MeninaChimp/Tone/blob/master/doc/img/%E5%88%9B%E5%BB%BA%E9%85%8D%E7%BD%AE.png)
 
 - 全局发布。
+
 ![alt text](https://github.com/MeninaChimp/Tone/blob/master/doc/img/%E5%85%A8%E5%B1%80%E5%8F%91%E5%B8%83.png)
 
 - 灰度发布。
+
 ![alt text](https://github.com/MeninaChimp/Tone/blob/master/doc/img/%E7%81%B0%E5%BA%A6%E5%8F%91%E5%B8%83.png)
 
 客户端：
