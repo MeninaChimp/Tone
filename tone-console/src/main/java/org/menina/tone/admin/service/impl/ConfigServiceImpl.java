@@ -10,6 +10,7 @@ import org.apache.zookeeper.KeeperException;
 import org.joda.time.DateTime;
 import org.menina.tone.admin.service.ConfigService;
 import org.menina.tone.common.utils.Constant;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
@@ -24,10 +25,13 @@ public class ConfigServiceImpl implements ConfigService {
 
     private CuratorFramework client;
 
+    @Value("${tone.zookeeper.address}")
+    private String zookeeperAddress;
+
     @Override
     public void initialZookeeperClient(String url) {
         this.client = CuratorFrameworkFactory.builder()
-                .connectString("127.0.0.1:2181")
+                .connectString(this.zookeeperAddress)
                 .retryPolicy(new ExponentialBackoffRetry(1000, 3))
                 .build();
         this.client.start();
