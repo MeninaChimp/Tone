@@ -6,9 +6,15 @@ package org.menina.tone.client.source;
  */
 public interface GrayscaleReleaseSupport {
 
-    /// 作用于事件通知的配置仓库
+    /**
+     * 作用于事件通知的配置仓库
+     * @param key
+     */
     void subscribe(String key);
 
-    /// 作用于非事件通知的配置仓库
+    /**
+     * 作用于非事件通知的配置仓库
+     * @param key
+     */
     void notifier(String key);
 }

@@ -12,6 +12,7 @@ public class SpringPropertySourceLoader implements PropertySourceLoader{
 
     private ResourceLoader resourceLoader;
 
+    @Override
     public Map<String, String> loadResource(String... paths){
         Map<String, String> propertySource = Maps.newHashMap();
         for(String path : paths){

@@ -33,16 +33,17 @@ public class ZookeeperFailbackRegistry {
         return recoverRegistered;
     }
 
-    public void recover(){
-        for(String node : this.recoverRegistered)
-        try {
-            if(node.contains(NetUtils.getLocalAddress().getHostAddress())){
-                this.client.create().creatingParentsIfNeeded().withMode(CreateMode.EPHEMERAL).forPath(node);
-                this.client.getData().watched().forPath(node);
-                log.info(String.format("Recover node and watcher for the path %s because net issue occur on %s", node, NetUtils.getLocalAddress().getHostAddress()));
+    public void recover() {
+        for (String node : ZookeeperFailbackRegistry.recoverRegistered) {
+            try {
+                if (node.contains(NetUtils.getLocalAddress().getHostAddress())) {
+                    this.client.create().creatingParentsIfNeeded().withMode(CreateMode.EPHEMERAL).forPath(node);
+                    this.client.getData().watched().forPath(node);
+                    log.info(String.format("Recover node and watcher for the path %s because net issue occur on %s", node, NetUtils.getLocalAddress().getHostAddress()));
+                }
+            } catch (Exception e) {
+                log.error(String.format("Failed to recover node and watcher for the path %s, %s", node, e.getMessage()), e);
             }
-        } catch (Exception e) {
-            log.error(String.format("Failed to recover node and watcher for the path %s, %s", node, e.getMessage()), e);
         }
     }
 }

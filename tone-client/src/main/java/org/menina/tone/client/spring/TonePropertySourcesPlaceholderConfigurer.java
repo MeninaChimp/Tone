@@ -63,6 +63,7 @@ public class TonePropertySourcesPlaceholderConfigurer extends PropertySourcesPla
         return Ordered.LOWEST_PRECEDENCE;
     }
 
+    @Override
     public PropertySources getAppliedPropertySources() throws IllegalStateException {
         Assert.state(this.appliedPropertySources != null, "PropertySources have not get been applied");
         return this.appliedPropertySources;

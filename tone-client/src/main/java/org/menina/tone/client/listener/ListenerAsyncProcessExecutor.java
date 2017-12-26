@@ -1,10 +1,15 @@
 package org.menina.tone.client.listener;
 
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.concurrent.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.RejectedExecutionException;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Menina on 2017/6/10.
@@ -12,17 +17,21 @@ import java.util.concurrent.*;
 @Slf4j
 public class ListenerAsyncProcessExecutor {
 
-    private static int maxTaskNum = 20;
+    private static int maxTaskNum = 100;
 
     private static int corePoolSize = 1;
 
     private static int maxPoolSize = 5;
 
-    private static ExecutorService executor = new ThreadPoolExecutor(corePoolSize,
+    private static ThreadFactory namedThreadFactory = new ThreadFactoryBuilder().setNameFormat("Tone-Async-Notify-Thread-%d").build();
+
+    private static ExecutorService executor = new ThreadPoolExecutor(
+            corePoolSize,
             maxPoolSize,
             60L,
             TimeUnit.SECONDS,
             new LinkedBlockingQueue<Runnable>(maxTaskNum),
+            namedThreadFactory,
             new ThreadPoolExecutor.AbortPolicy()
             );
 
