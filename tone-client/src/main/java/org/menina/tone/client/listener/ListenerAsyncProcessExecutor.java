@@ -53,7 +53,5 @@ public class ListenerAsyncProcessExecutor {
         }catch (Throwable t){
             log.error(String.format("Commit listener to process failed, %s"), t.getMessage(), t);
         }
-
-        return;
     }
 }
